@@ -1,4 +1,4 @@
-﻿namespace books
+﻿namespace  Books.core.Entities
 {
     public class Listings
     {

@@ -1,6 +1,6 @@
-﻿namespace books
+﻿namespace Books.core.Entities
 {
-    public class Books
+    public class Book
     {
         public int BookId {  get; set; } /* מזהה ספר*/
         public string Title { get; set; }/* שם ספר*/
