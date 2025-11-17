@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace TestProject1
 {
-    public class BooksControlerTest
-    {
-        public FakeContext _fakeContext= new FakeContext();
-        public void Add_userOk()
-        {
+    //public class BooksControlerTest
+    //{
+    //    public FakeContext _fakeContext= new FakeContext();
+    //    public void Add_userOk()
+    //    {
 
-        }
-    }
+    //    }
+    //}
 }

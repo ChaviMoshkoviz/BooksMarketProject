@@ -1,5 +1,7 @@
 ﻿using books;
 using Books.core.Entities;
+using Books.core.Repositories;
+using Books.core.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,47 +10,36 @@ using System.Threading.Tasks;
 
 namespace Books.service
 {
-    public class UserService
+    public class UserService: IUserService
     {
-        private readonly IDataContext _context;
-        public UserService(IDataContext context)
+        private readonly IUserRepository _UserRepository;
+        public UserService(IUserRepository UserRepository)
         {
-            _context = context;
+            _UserRepository = UserRepository;
         }
         public List<Users> GetActivUsers()
         {
-            return _context.users.Where(u=>u.status).ToList();
+            return _UserRepository.GetActivUsers();
         }
         public Users GetUserById(int id)
         {
-            return _context.users.FirstOrDefault(u => u.UserId == id && u.status);
+            return _UserRepository.GetUserById(id);
         }
         public Users RegisterUser( Users newUser)
         {
-            newUser.UserId = _context.users.Any() ? _context.users.Max(u => u.UserId) + 1 : 1;
-            newUser.status = true;
-            _context.users.Add(newUser);
-            return newUser;
+          
+            return _UserRepository.RegisterUser(newUser);
         }
 
         public Users UpdateUser(int id,  Users newUser)
         {
-            var user = _context.users.FirstOrDefault(u => u.UserId == id);
-            if (user == null)
-                return null;
-            user.FullName = newUser.FullName;
-            user.Email = newUser.Email;
-            user.Phone = newUser.Phone;
-            user.City = newUser.City;
-            return user;
+          
+            return _UserRepository.UpdateUser(id, newUser);
         }
         public Users DeactivateUser(int id)
         {
-            var user = _context.users.FirstOrDefault(u => u.UserId == id);
-            if (user == null)
-                return null;
-            user.status = false;
-            return user;
+           
+            return _UserRepository.DeactivateUser(id);
         }
     }
 }

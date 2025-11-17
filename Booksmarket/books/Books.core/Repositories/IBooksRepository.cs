@@ -9,10 +9,10 @@ namespace Books.core.Repositories
 {
     public interface IBooksRepository
     {
-       Task<IEnumerable<Book>> GetAllAsync();
-        Task<IEnumerable<Book>>GetByGenreAsync(string genre);
-        Task<IEnumerable<Book>> GetByAuthorAsync(string author);
-        Task AddAsync(Book book);
+        List<Book> GetAllAsync();
+        List<Book>GetByGenreAsync(string genre);
+        List<Book> GetByAuthorAsync(string author);
+       Book AddAsync(Book book);
 
 
     }

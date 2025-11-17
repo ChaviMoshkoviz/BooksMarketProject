@@ -11,31 +11,29 @@ using System.Threading.Tasks;
 
 namespace Books.service
 {
-    public class BooksService
+    public class BooksService:IBooksService
     {
-        private readonly IDataContext _context;
-        public BooksService(IDataContext context)
+        private readonly IBooksRepository _BooksRepository;
+        public BooksService(IBooksRepository BooksRepository)
         {
-            _context = context;
+            _BooksRepository = BooksRepository;
         }
         public List<Book> GetAllBooks()
         {
-            return _context.books;
+            return _BooksRepository.GetAllAsync();
         }
         public List<Book> GetBooksByAuthor(string author)
         {
-            return _context.books.Where(b=> b.Author.ToList() == author.ToList()).ToList();
+            return _BooksRepository.GetByAuthorAsync(author);
         }
 
         public List<Book> GetBooksByGenre(string genre)
         {
-            return _context.books.Where(b => b.Genre.ToList() == genre.ToList()).ToList();
+            return _BooksRepository.GetByGenreAsync(genre);
         }
         public Book AddBook(Book newBook)
         {
-            newBook.BookId = _context.books.Any() ? _context.books.Max(b => b.BookId) + 1 : 1;
-            _context.books.Add(newBook);
-            return newBook;
+            return _BooksRepository.AddAsync(newBook);
         }
 
     }

@@ -1,5 +1,7 @@
 ﻿using books;
 using Books.core.Entities;
+using Books.core.Repositories;
+using Books.core.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,56 +10,39 @@ using System.Threading.Tasks;
 
 namespace Books.service
 {
-    public class ListingsService
+    public class ListingsService: IListingsService
     {
-        private readonly IDataContext _context;
-        public ListingsService(IDataContext context)
+        private readonly IListingsRepository _ListingsRepository;
+        public ListingsService(IListingsRepository ListingsRepository)
         {
-            _context = context;
+            _ListingsRepository = ListingsRepository;
         }
         public List<Listings> GetAllListings()
         {
-            return _context.listing.Where(a => a.IsActiv).ToList();
+            return _ListingsRepository.GetAllListings();
         }
         public List<Listings> GetListingsByUser(int userId)
         {
-            return _context.listing.Where(a => a.UserId == userId && a.IsActiv).ToList();
+            return _ListingsRepository.GetListingsByUser(userId);
         }
         public List<Listings> GetListingsByPriceRange(decimal minPrice, decimal maxPrice)
         {
-            return _context.listing.Where(a => a.IsActiv && a.Price >= minPrice && a.Price <= maxPrice).ToList();
+            return _ListingsRepository.GetListingsByPriceRange( minPrice,  maxPrice);
         }
         public Listings CreateListing(Listings newListings)
         {
-            newListings.ListingId = _context.listing.Any() ? _context.listing.Max(a => a.ListingId) + 1 : 1;
-            newListings.DatePosted = DateTime.Now;
-            newListings.IsActiv = true;
-            _context.listing.Add(newListings);
-            return newListings;
+           
+            return _ListingsRepository.CreateListing(newListings);
         }
         public Listings UpdateListing(int id, Listings UpdateListing)
         {
-            var listing = _context.listing.FirstOrDefault(u => u.ListingId == id);
-            if (listing != null)
-            {
-                return null;
-            }
-            listing.ActionType = UpdateListing.ActionType;
-            listing.Price = UpdateListing.Price;
-            listing.IsActiv = UpdateListing.IsActiv;
-            listing.BookId = UpdateListing.BookId;
-            listing.UserId = UpdateListing.UserId;
-            return listing;
+           
+            return _ListingsRepository.UpdateListing(id, UpdateListing);
         }
         public Listings DeleteListing(int id)
         {
-            var listing = _context.listing.FirstOrDefault(u => u.ListingId == id);
-            if (listing != null)
-            {
-                return null;
-            }
-            listing.IsActiv= false;
-            return listing;
+            
+            return _ListingsRepository.DeleteListing(id);
         }
     }
 }

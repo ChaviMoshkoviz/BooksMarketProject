@@ -1,7 +1,10 @@
-﻿namespace Books.core.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Books.core.Entities
 {
     public class Book
     {
+        [Key]
         public int BookId {  get; set; } /* מזהה ספר*/
         public string Title { get; set; }/* שם ספר*/
         public string Author { get; set; } /* שם מחבר*/

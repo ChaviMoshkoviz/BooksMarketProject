@@ -9,9 +9,9 @@ namespace Books.core.Service
 {
     public interface IBooksService
     {
-        Task<IEnumerable<Book>> GetAllAsync();
-        Task<IEnumerable<Book>> GetByGenreAsync(string genre);
-        Task<IEnumerable<Book>> GetByAuthorAsync(string author);
-        Task AddAsync(Book book);
+        List<Book> GetAllBooks();
+        List<Book> GetBooksByGenre(string genre);
+        List<Book> GetBooksByAuthor(string author);
+        Book AddBook(Book book);
     }
 }
