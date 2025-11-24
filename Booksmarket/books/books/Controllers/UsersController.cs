@@ -1,4 +1,5 @@
 ﻿using Books.core.Entities;
+using Books.core.Service;
 using Books.service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -10,8 +11,8 @@ namespace books.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly UserService _service;
-        public UsersController(UserService service)
+        private readonly IUserService _service;
+        public UsersController(IUserService service)
         {
             _service = service;
         }
@@ -24,9 +25,9 @@ namespace books.Controllers
         }
 
         [HttpGet("{UserId}")]
-        public IActionResult GetUserById(int id)
+        public IActionResult GetUserById(int UserId)
         {
-            var user = _service.GetUserById(id);
+            var user = _service.GetUserById(UserId);
             if (user == null)
                 return NotFound("user not found or inactiv");
             return Ok(user);

@@ -1,5 +1,6 @@
 ﻿using books;
 using Books.core.Entities;
+using Books.core.Repositories;
 using Books.core.Service;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Books.data
 {
-    public class ListingsRepository: IListingsService
+    public class ListingsRepository: IListingsRepository
     {
         private readonly DataContext _context;
         public ListingsRepository(DataContext context)
@@ -60,6 +61,11 @@ namespace Books.data
             }
             listing.IsActiv = false;
             return listing;
+        }
+
+        public void save()
+        {
+            _context.SaveChanges();
         }
 
     }

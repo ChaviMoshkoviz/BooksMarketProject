@@ -11,8 +11,8 @@ namespace books.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private readonly BooksService _service;
-        public BooksController(BooksService service)
+        private readonly IBooksService _service;
+        public BooksController(IBooksService service)
         { 
             _service=service;
         }
@@ -26,20 +26,20 @@ namespace books.Controllers
         
         }
         [HttpGet("author/{Author}")]
-        public IActionResult GetBooksByAuthor(string author)
+        public IActionResult GetBooksByAuthor(string Author)
         {
-            var filteredBooks=_service.GetBooksByAuthor(author);
+            var filteredBooks=_service.GetBooksByAuthor(Author);
             if (!filteredBooks.Any())
-                return NotFound($"No books found by author {author}");
+                return NotFound($"No books found by author {Author}");
             return Ok(filteredBooks);
         }
 
         [HttpGet("genre/{Genre}")]
-        public IActionResult GetBooksByGenre(string genre)
+        public IActionResult GetBooksByGenre(string Genre)
         {
-            var filteredBooks = _service.GetBooksByGenre(genre);
+            var filteredBooks = _service.GetBooksByGenre(Genre);
             if (!filteredBooks.Any())
-                return NotFound($"No books found by category {genre}");
+                return NotFound($"No books found by category {Genre}");
             return Ok(filteredBooks);
         }
         [HttpPost]
@@ -47,5 +47,6 @@ namespace books.Controllers
         {
             return Ok(_service.AddBook(newbook));
         }
+
     }
 }

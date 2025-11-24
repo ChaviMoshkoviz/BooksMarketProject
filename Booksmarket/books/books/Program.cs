@@ -17,6 +17,12 @@ builder.Services.AddDbContext<DataContext>();
 
 builder.Services.AddScoped<IBooksService, BooksService>();
 builder.Services.AddScoped<IBooksRepository, BooksRepository>();
+
+builder.Services.AddScoped<IListingsService, ListingsService>();
+builder.Services.AddScoped<IListingsRepository, ListingsRepository>();
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

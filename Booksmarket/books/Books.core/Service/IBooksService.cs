@@ -10,8 +10,8 @@ namespace Books.core.Service
     public interface IBooksService
     {
         List<Book> GetAllBooks();
-        List<Book> GetBooksByGenre(string genre);
-        List<Book> GetBooksByAuthor(string author);
+        List<Book> GetBooksByGenre(string Genre);
+        List<Book> GetBooksByAuthor(string Author);
         Book AddBook(Book book);
     }
 }

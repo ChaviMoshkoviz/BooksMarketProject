@@ -33,6 +33,7 @@ namespace Books.service
         }
         public Book AddBook(Book newBook)
         {
+            _BooksRepository.save();
             return _BooksRepository.AddAsync(newBook);
         }
 

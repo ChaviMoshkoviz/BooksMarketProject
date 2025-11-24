@@ -32,8 +32,6 @@ namespace Books.data
         }
         public  List<Book> GetByGenreAsync(string genre)
         {
-
-          
             var result = _context.books.Where(b => b.Genre.ToLower() == genre.ToLower()).ToList();
             return result;
 
@@ -57,6 +55,11 @@ namespace Books.data
 
             return book;
 ;
+        }
+
+        public void save()
+        {
+            _context.SaveChanges();
         }
 
     }

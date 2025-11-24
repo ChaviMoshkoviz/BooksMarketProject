@@ -11,6 +11,7 @@ namespace Books.core.Entities
         public string Genre { get; set; } /* סוג/ קטגוריה*/
         public string Condition { get; set; } /* מצב (חדש/טוב/ישן.) וכו*/
         public string Description { get; set; } /* תיאור כללי*/
+        public List<Listings> Listings { get; set; }/* כל המודעות שפורסמו עבור הספר*/
 
     }
 }

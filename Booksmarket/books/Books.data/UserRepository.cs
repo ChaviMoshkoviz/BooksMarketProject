@@ -51,5 +51,10 @@ namespace Books.data
             user.status = false;
             return user;
         }
+
+        public void save()
+        {
+            _context.SaveChanges();
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace Books.core.Entities
         public string Phone { get; set; } /* טלפון*/
         public string City { get; set; } /* עיר*/
         public bool status { get; set; } = true; /*סטטוס פעיל/לא פעיל*/
-        
+        public List<Listings> Listings { get; set; }/*כל המודעות שפורסמו */
+
     }
 }

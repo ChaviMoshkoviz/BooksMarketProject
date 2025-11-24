@@ -31,17 +31,17 @@ namespace Books.service
         }
         public Listings CreateListing(Listings newListings)
         {
-           
+            _ListingsRepository.save();
             return _ListingsRepository.CreateListing(newListings);
         }
         public Listings UpdateListing(int id, Listings UpdateListing)
         {
-           
+            _ListingsRepository.save();
             return _ListingsRepository.UpdateListing(id, UpdateListing);
         }
         public Listings DeleteListing(int id)
         {
-            
+            _ListingsRepository.save();
             return _ListingsRepository.DeleteListing(id);
         }
     }

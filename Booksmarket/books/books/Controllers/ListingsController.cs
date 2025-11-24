@@ -1,4 +1,5 @@
 ﻿using Books.core.Entities;
+using Books.core.Service;
 using Books.service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -10,8 +11,8 @@ namespace books.Controllers
     [ApiController]
     public class ListingsController : ControllerBase
     {
-        private readonly ListingsService _service;
-        public ListingsController(ListingsService service)
+        private readonly IListingsService _service;
+        public ListingsController(IListingsService service)
         {
            _service = service;
         }
@@ -22,9 +23,9 @@ namespace books.Controllers
             return Ok(_service.GetAllListings());
         }
         [HttpGet("byUser/{UserId}")]
-        public IActionResult GetListingsByUser(int userId)
+        public IActionResult GetListingsByUser(int UserId)
         {
-            var result = _service.GetListingsByUser(userId);
+            var result = _service.GetListingsByUser(UserId);
             if (result.Any())
                 return NotFound("no ads found for this user");
             return Ok(result);

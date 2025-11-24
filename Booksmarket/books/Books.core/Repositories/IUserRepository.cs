@@ -14,5 +14,6 @@ namespace Books.core.Repositories
         Users RegisterUser(Users newUser);
         Users UpdateUser(int id, Users newUser);
         Users DeactivateUser(int id);
+        void save();
     }
 }
