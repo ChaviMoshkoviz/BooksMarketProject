@@ -1,4 +1,6 @@
-﻿using Books.core.Entities;
+﻿using AutoMapper;
+using Books.core.DTO;
+using Books.core.Entities;
 using Books.core.Service;
 using Books.service;
 using Microsoft.AspNetCore.Http;
@@ -12,15 +14,18 @@ namespace books.Controllers
     public class ListingsController : ControllerBase
     {
         private readonly IListingsService _service;
-        public ListingsController(IListingsService service)
+        private readonly IMapper _mapper;
+        public ListingsController(IListingsService service , IMapper mapper)
         {
            _service = service;
+            _mapper= mapper;
         }
 
         [HttpGet]
         public IActionResult GetAllListings()
         {
-            return Ok(_service.GetAllListings());
+            var listing= _service.GetAllListings();
+            return Ok(_mapper.Map<List<ListingsDTO>>(listing));
         }
         [HttpGet("byUser/{UserId}")]
         public IActionResult GetListingsByUser(int UserId)
@@ -28,7 +33,8 @@ namespace books.Controllers
             var result = _service.GetListingsByUser(UserId);
             if (result.Any())
                 return NotFound("no ads found for this user");
-            return Ok(result);
+            var resultDto = _mapper.Map<IEnumerable<ListingsDTO>>(result);
+            return Ok(resultDto);
 
         }
         [HttpGet("byPrice")]
@@ -37,7 +43,8 @@ namespace books.Controllers
             var results = _service.GetListingsByPriceRange(minPrice, maxPrice);
             if (!results.Any())
                 return NotFound("no ads found in the requested price range");
-            return Ok(results);
+            var resultDto = _mapper.Map<IEnumerable<ListingsDTO>>(results);
+            return Ok(resultDto);
         }
         [HttpPost]
         public IActionResult CreadeListing([FromBody] Listings newlistings)
@@ -46,24 +53,28 @@ namespace books.Controllers
             return Ok(_service.CreateListing(newlistings));
         }
         [HttpPut("{id}")]
-        public IActionResult UpdateListing(int id, [FromBody] Listings UpdateListing)
+        public IActionResult UpdateListing(int id, [FromBody] PutListingsDTO UpdateListing)
         {
-            var result = _service.UpdateListing(id, UpdateListing);
+            var listingEntity = _mapper.Map<Listings>(UpdateListing);
+            var result = _service.UpdateListing(id, listingEntity);
             if (result == null)
                 return NotFound("ads is not found");
-           
-            return Ok(result);
+            var finalDto = _mapper.Map<ListingsDTO>(result);
+            return Ok(finalDto);
 
         }
-        [HttpDelete("{id}")]
+        [HttpPut("{id}/disable")]
         public IActionResult DeleteListing(int id)
         {
-            var result=_service.DeleteListing(id);
+            var result = _service.DeleteListing(id);
             if (result == null)
                 return NotFound(" ads is not found ");
-           
-            return Ok($"The ads {result.ListingId} succeessfully disabled");
+            var resultDto = _mapper.Map<DeactivateListingsDTO>(result);
+
+            return Ok($"The ads {resultDto.ListingId} succeessfully disabled");
         }
+
+
 
     }
 }

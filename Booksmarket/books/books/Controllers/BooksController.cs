@@ -1,4 +1,6 @@
 ﻿
+using AutoMapper;
+using Books.core.DTO;
 using Books.core.Entities;
 using Books.core.Service;
 using Books.service;
@@ -12,17 +14,20 @@ namespace books.Controllers
     public class BooksController : ControllerBase
     {
         private readonly IBooksService _service;
-        public BooksController(IBooksService service)
+        private readonly IMapper _mapper;
+        public BooksController(IBooksService service ,IMapper mapper)
         { 
             _service=service;
+            _mapper=mapper;
         }
         [HttpGet]
         public IActionResult GetAllBooks()
         {
-     var books = _service.GetAllBooks();
+          var books = _service.GetAllBooks();
             if(!books.Any())
                 return NotFound("no books found");
-            return Ok(books);
+            var booksDto = _mapper.Map<IEnumerable<BooksDTO>>(books);
+            return Ok(booksDto);
         
         }
         [HttpGet("author/{Author}")]
@@ -31,7 +36,8 @@ namespace books.Controllers
             var filteredBooks=_service.GetBooksByAuthor(Author);
             if (!filteredBooks.Any())
                 return NotFound($"No books found by author {Author}");
-            return Ok(filteredBooks);
+            var booksDto = _mapper.Map<IEnumerable<BooksDTO>>(filteredBooks);
+            return Ok(booksDto);
         }
 
         [HttpGet("genre/{Genre}")]
@@ -40,11 +46,13 @@ namespace books.Controllers
             var filteredBooks = _service.GetBooksByGenre(Genre);
             if (!filteredBooks.Any())
                 return NotFound($"No books found by category {Genre}");
-            return Ok(filteredBooks);
+            var booksDto = _mapper.Map<IEnumerable<BooksDTO>>(filteredBooks);
+            return Ok(booksDto);
         }
         [HttpPost]
         public IActionResult AddBook([FromBody] Book newbook)
         {
+          
             return Ok(_service.AddBook(newbook));
         }
 

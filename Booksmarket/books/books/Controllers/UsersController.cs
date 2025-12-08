@@ -1,9 +1,13 @@
-﻿using Books.core.Entities;
+﻿using AutoMapper;
+using Books.core.DTO;
+using Books.core.Entities;
 using Books.core.Service;
 using Books.service;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
 
 namespace books.Controllers
 {
@@ -12,16 +16,18 @@ namespace books.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _service;
-        public UsersController(IUserService service)
+        private readonly IMapper _mapper;
+        public UsersController(IUserService service, IMapper mapper)
         {
             _service = service;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult GetActivUsers()
         {
-           
-            return Ok(_service.GetActivUsers());
+            var user = _service.GetActivUsers();
+            return Ok(_mapper.Map<List<UsersDTO>>(user));
         }
 
         [HttpGet("{UserId}")]
@@ -30,7 +36,8 @@ namespace books.Controllers
             var user = _service.GetUserById(UserId);
             if (user == null)
                 return NotFound("user not found or inactiv");
-            return Ok(user);
+            var userDto = _mapper.Map<IEnumerable<UsersDTO>>(user);
+            return Ok(userDto);
         }
 
         [HttpPost("register")]
@@ -40,21 +47,27 @@ namespace books.Controllers
             return Ok(_service.RegisterUser(newUser));
         }
         [HttpPut("{id}")]
-        public IActionResult UpdateUser(int id, [FromBody] Users newUser)
+        public IActionResult UpdateUser(int id, [FromBody] PutUsersDTO newUser)
         {
-            var user = _service.UpdateUser(id, newUser);
+            var listingEntity = _mapper.Map<Users>(newUser);
+            var user = _service.UpdateUser(id, listingEntity);
             if (user == null)
                 return NotFound("user not found");
-            return Ok(user);
+            var userDto = _mapper.Map<UsersDTO>(user);
+            return Ok(userDto);
         }
-        [HttpPost("deactivate/{id}")]
-        public IActionResult DeactivateUser(int id) 
+     
+        [HttpPut("deactivate/{id}")]
+        public IActionResult DeactivateUser(int id)
         {
-        var user = _service.DeactivateUser(id);
+            var user = _service.DeactivateUser(id);
+
             if (user == null)
                 return NotFound("user not found");
-          
-            return Ok($"user {user.FullName} hes been marked as inactiv");
+            var userDto = _mapper.Map<DeactivateUsersDTO>(user);
+
+            return Ok(userDto);
         }
+    
     }
 }

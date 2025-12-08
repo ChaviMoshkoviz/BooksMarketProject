@@ -1,19 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Books.core.Entities
+namespace Books.core.DTO
 {
-    public class Users
+    public class UsersDTO
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int UserId { get; set; } /* מזהה משתמש*/
         public string FullName { get; set; } /* שם מלא*/
         public string Email { get; set; } /* מייל*/
         public string Phone { get; set; } /* טלפון*/
         public string City { get; set; } /* עיר*/
         public bool status { get; set; } = true; /*סטטוס פעיל/לא פעיל*/
-        public List<Listings> Listings { get; set; }/*כל המודעות שפורסמו */
-
     }
 }
