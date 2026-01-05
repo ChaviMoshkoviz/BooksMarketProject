@@ -27,7 +27,7 @@ namespace books.Controllers
         public IActionResult GetActivUsers()
         {
             var user = _service.GetActivUsers();
-            return Ok(_mapper.Map<List<UsersDTO>>(user));
+            return Ok(_mapper.Map<IEnumerable<UsersDTO>>(user));
         }
 
         [HttpGet("{UserId}")]
@@ -36,16 +36,24 @@ namespace books.Controllers
             var user = _service.GetUserById(UserId);
             if (user == null)
                 return NotFound("user not found or inactiv");
-            var userDto = _mapper.Map<IEnumerable<UsersDTO>>(user);
+            var userDto = _mapper.Map<UsersDTO>(user);
+         
             return Ok(userDto);
         }
 
         [HttpPost("register")]
-        public IActionResult RegisterUser([FromBody] Users newUser)
+        public IActionResult RegisterUser([FromBody] RegisterUserDTO newUserDto)
         {
-         
-            return Ok(_service.RegisterUser(newUser));
+            // אבטחה: מיפוי מה-DTO לישות כדי למנוע הזרקת שדות רגישים
+            var userEntity = _mapper.Map<Users>(newUserDto);
+
+            var createdUser = _service.RegisterUser(userEntity);
+
+            // החזרת התוצאה כ-DTO (מומלץ להשתמש ב-CreatedAtAction)
+            var resultDto = _mapper.Map<UsersDTO>(createdUser);
+            return CreatedAtAction(nameof(GetUserById), new { userId = resultDto.UserId }, resultDto);
         }
+
         [HttpPut("{id}")]
         public IActionResult UpdateUser(int id, [FromBody] PutUsersDTO newUser)
         {

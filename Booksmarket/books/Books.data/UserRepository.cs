@@ -26,7 +26,7 @@ namespace Books.data
         }
         public Users RegisterUser(Users newUser)
         {
-            newUser.UserId = _context.users.Any() ? _context.users.Max(u => u.UserId) + 1 : 1;
+       
             newUser.status = true;
             _context.users.Add(newUser);
             return newUser;

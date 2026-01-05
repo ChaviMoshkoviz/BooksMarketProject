@@ -50,10 +50,17 @@ namespace books.Controllers
             return Ok(booksDto);
         }
         [HttpPost]
-        public IActionResult AddBook([FromBody] Book newbook)
+        public IActionResult AddBook([FromBody] BooksDTO newBookDto)
         {
-          
-            return Ok(_service.AddBook(newbook));
+
+            // 1. מיפוי מה-DTO שקיבלנו מהמשתמש לישות של בסיס הנתונים
+            var bookEntity = _mapper.Map<Book>(newBookDto);
+
+            // 2. שמירה בבסיס הנתונים דרך הסרביס
+            var addedBook = _service.AddBook(bookEntity);
+
+            // 3. החזרת התוצאה כ-DTO (אופציונלי אך מומלץ)
+            return Ok(_mapper.Map<BooksDTO>(addedBook));
         }
 
     }

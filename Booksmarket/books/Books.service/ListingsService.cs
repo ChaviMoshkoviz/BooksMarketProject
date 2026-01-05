@@ -30,19 +30,27 @@ namespace Books.service
             return _ListingsRepository.GetListingsByPriceRange( minPrice,  maxPrice);
         }
         public Listings CreateListing(Listings newListings)
-        {
+        {var listings = _ListingsRepository.CreateListing(newListings);
             _ListingsRepository.save();
-            return _ListingsRepository.CreateListing(newListings);
+            return listings;
         }
         public Listings UpdateListing(int id, Listings UpdateListing)
         {
-            _ListingsRepository.save();
-            return _ListingsRepository.UpdateListing(id, UpdateListing);
+            var listings = _ListingsRepository.UpdateListing(id, UpdateListing);
+            if (listings != null)
+            {
+                _ListingsRepository.save();
+            }
+            return listings ;
         }
         public Listings DeleteListing(int id)
         {
-            _ListingsRepository.save();
-            return _ListingsRepository.DeleteListing(id);
+            var listings = _ListingsRepository.DeleteListing(id);
+            if (listings != null)
+            {
+                _ListingsRepository.save();
+            }
+            return listings;
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Books.data
         }
         public Listings CreateListing(Listings newListings)
         {
-            newListings.ListingId = _context.listing.Any() ? _context.listing.Max(a => a.ListingId) + 1 : 1;
+          
             newListings.DatePosted = DateTime.Now;
             newListings.IsActiv = true;
             _context.listing.Add(newListings);
@@ -41,7 +41,7 @@ namespace Books.data
         public Listings UpdateListing(int id, Listings UpdateListing)
         {
             var listing = _context.listing.FirstOrDefault(u => u.ListingId == id);
-            if (listing != null)
+            if (listing == null)
             {
                 return null;
             }
@@ -55,7 +55,7 @@ namespace Books.data
         public Listings DeleteListing(int id)
         {
             var listing = _context.listing.FirstOrDefault(u => u.ListingId == id);
-            if (listing != null)
+            if (listing == null)
             {
                 return null;
             }

@@ -33,8 +33,13 @@ namespace Books.service
         }
         public Book AddBook(Book newBook)
         {
+            if (newBook == null)
+            {
+                return null;
+            }
+            var book = _BooksRepository.AddAsync(newBook);
             _BooksRepository.save();
-            return _BooksRepository.AddAsync(newBook);
+            return book;
         }
 
     }

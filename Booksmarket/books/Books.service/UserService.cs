@@ -27,19 +27,35 @@ namespace Books.service
         }
         public Users RegisterUser( Users newUser)
         {
-            _UserRepository.save();
-            return _UserRepository.RegisterUser(newUser);
+            if (newUser == null)
+            {
+                return null;
+            }
+            var user = _UserRepository.RegisterUser(newUser);
+            if (user != null)
+            {
+                _UserRepository.save();
+            }
+            return user ;
         }
 
         public Users UpdateUser(int id,  Users newUser)
         {
-            _UserRepository.save();
-            return _UserRepository.UpdateUser(id, newUser);
+            var user= _UserRepository.UpdateUser(id, newUser);
+            if (user != null)
+            {
+                _UserRepository.save();
+            }
+            return user;
         }
         public Users DeactivateUser(int id)
         {
-            _UserRepository.save();
-            return _UserRepository.DeactivateUser(id);
+            var user= _UserRepository.DeactivateUser(id);
+            if (user != null)
+            {
+                _UserRepository.save();
+            }
+            return user;
         }
     }
 }

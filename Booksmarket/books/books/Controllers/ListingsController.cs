@@ -31,7 +31,7 @@ namespace books.Controllers
         public IActionResult GetListingsByUser(int UserId)
         {
             var result = _service.GetListingsByUser(UserId);
-            if (result.Any())
+            if (result==null||!result.Any())
                 return NotFound("no ads found for this user");
             var resultDto = _mapper.Map<IEnumerable<ListingsDTO>>(result);
             return Ok(resultDto);
@@ -47,10 +47,14 @@ namespace books.Controllers
             return Ok(resultDto);
         }
         [HttpPost]
-        public IActionResult CreadeListing([FromBody] Listings newlistings)
+        public IActionResult CreadeListing([FromBody] ListingsDTO newListingDto)
         {
-          
-            return Ok(_service.CreateListing(newlistings));
+
+            var listingEntity = _mapper.Map<Listings>(newListingDto);
+            var result = _service.CreateListing(listingEntity);
+
+            // החזרת האובייקט החדש שנוצר כ-DTO
+            return Ok(_mapper.Map<ListingsDTO>(result));
         }
         [HttpPut("{id}")]
         public IActionResult UpdateListing(int id, [FromBody] PutListingsDTO UpdateListing)
@@ -68,10 +72,15 @@ namespace books.Controllers
         {
             var result = _service.DeleteListing(id);
             if (result == null)
-                return NotFound(" ads is not found ");
+                return NotFound(new { Error = $"Listing with ID {id} not found" });
             var resultDto = _mapper.Map<DeactivateListingsDTO>(result);
 
-            return Ok($"The ads {resultDto.ListingId} succeessfully disabled");
+            // החזרת אובייקט אנונימי הכולל גם הודעה וגם את הנתונים
+            return Ok(new
+            {
+                Message = "Listing successfully disabled",
+                ListingId = resultDto.ListingId
+            });
         }
 
 

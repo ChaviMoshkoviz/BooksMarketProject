@@ -47,12 +47,10 @@ namespace Books.data
         public Book AddAsync(Book book)
         {
           
-            book.BookId = _context.books.Any() ? _context.books.Max(b => b.BookId) + 1 : 1;
-
+        
            
             _context.books.Add(book);
-
-
+        
             return book;
 ;
         }
