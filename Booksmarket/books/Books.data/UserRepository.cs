@@ -43,12 +43,12 @@ namespace Books.data
             user.City = newUser.City;
             return user;
         }
-        public Users DeactivateUser(int id)
+        public Users ChangeUserStatus(int id)
         {
             var user = _context.users.FirstOrDefault(u => u.UserId == id);
             if (user == null)
                 return null;
-            user.status = false;
+            user.status = !user.status;
             return user;
         }
 

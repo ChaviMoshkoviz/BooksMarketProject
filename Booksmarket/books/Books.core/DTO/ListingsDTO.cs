@@ -9,6 +9,7 @@ namespace Books.core.DTO
 {
     public class ListingsDTO
     {
+        public int ListingId { get; set; } /* מזהה מודעה*/
         public int UserId { get; set; } /* מזהה המשתמש שפרסם*/
         public int BookId { get; set; } /* מזהה ספר שפורסם*/
         public string ActionType { get; set; } /* סוג פעולה - מכירה או מסירה*/

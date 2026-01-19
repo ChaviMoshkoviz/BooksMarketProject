@@ -68,9 +68,9 @@ namespace books.Controllers
 
         }
         [HttpPut("{id}/disable")]
-        public IActionResult DeleteListing(int id)
+        public IActionResult ToggleListingStatus(int id)
         {
-            var result = _service.DeleteListing(id);
+            var result = _service.ToggleListingStatus(id);
             if (result == null)
                 return NotFound(new { Error = $"Listing with ID {id} not found" });
             var resultDto = _mapper.Map<DeactivateListingsDTO>(result);

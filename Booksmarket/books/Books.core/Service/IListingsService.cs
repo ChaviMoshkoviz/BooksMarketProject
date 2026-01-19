@@ -14,6 +14,6 @@ namespace Books.core.Service
         List<Listings> GetListingsByPriceRange(decimal minPrice, decimal maxPrice);
         Listings CreateListing(Listings newListings);
         Listings UpdateListing(int id, Listings UpdateListing);
-        Listings DeleteListing(int id);
+        Listings ToggleListingStatus(int id);
     }
 }

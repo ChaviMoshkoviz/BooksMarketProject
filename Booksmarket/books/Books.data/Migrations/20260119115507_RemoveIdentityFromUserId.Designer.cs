@@ -12,8 +12,8 @@ using books;
 namespace Books.data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20251208133528_DisableUserIdIdentityManual")]
-    partial class DisableUserIdIdentityManual
+    [Migration("20260119115507_RemoveIdentityFromUserId")]
+    partial class RemoveIdentityFromUserId
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -85,14 +85,11 @@ namespace Books.data.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UsersUserId")
-                        .HasColumnType("int");
-
                     b.HasKey("ListingId");
 
                     b.HasIndex("BookId");
 
-                    b.HasIndex("UsersUserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("listing");
                 });
@@ -136,7 +133,7 @@ namespace Books.data.Migrations
 
                     b.HasOne("Books.core.Entities.Users", "Users")
                         .WithMany("Listings")
-                        .HasForeignKey("UsersUserId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

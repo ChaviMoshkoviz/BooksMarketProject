@@ -43,12 +43,13 @@ namespace Books.service
             }
             return listings ;
         }
-        public Listings DeleteListing(int id)
+        public Listings ToggleListingStatus(int id)
         {
-            var listings = _ListingsRepository.DeleteListing(id);
+            var listings = _ListingsRepository.ToggleListingStatus(id);
             if (listings != null)
             {
                 _ListingsRepository.save();
+               
             }
             return listings;
         }

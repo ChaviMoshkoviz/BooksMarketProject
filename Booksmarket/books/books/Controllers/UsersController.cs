@@ -44,6 +44,10 @@ namespace books.Controllers
         [HttpPost("register")]
         public IActionResult RegisterUser([FromBody] RegisterUserDTO newUserDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState); // יחזיר פירוט על השדות החסרים
+            }
             // אבטחה: מיפוי מה-DTO לישות כדי למנוע הזרקת שדות רגישים
             var userEntity = _mapper.Map<Users>(newUserDto);
 
@@ -57,8 +61,8 @@ namespace books.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateUser(int id, [FromBody] PutUsersDTO newUser)
         {
-            var listingEntity = _mapper.Map<Users>(newUser);
-            var user = _service.UpdateUser(id, listingEntity);
+            var userEntity = _mapper.Map<Users>(newUser);
+            var user = _service.UpdateUser(id, userEntity);
             if (user == null)
                 return NotFound("user not found");
             var userDto = _mapper.Map<UsersDTO>(user);
@@ -66,9 +70,9 @@ namespace books.Controllers
         }
      
         [HttpPut("deactivate/{id}")]
-        public IActionResult DeactivateUser(int id)
+        public IActionResult ChangeUserStatus(int id)
         {
-            var user = _service.DeactivateUser(id);
+            var user = _service.ChangeUserStatus(id);
 
             if (user == null)
                 return NotFound("user not found");

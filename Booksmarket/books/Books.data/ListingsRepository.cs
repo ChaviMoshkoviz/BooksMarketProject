@@ -52,16 +52,18 @@ namespace Books.data
             listing.UserId = UpdateListing.UserId;
             return listing;
         }
-        public Listings DeleteListing(int id)
+        public Listings ToggleListingStatus(int id)
         {
             var listing = _context.listing.FirstOrDefault(u => u.ListingId == id);
-            if (listing == null)
+            if (listing != null)
             {
-                return null;
+                listing.IsActiv = !listing.IsActiv;
+            
             }
-            listing.IsActiv = false;
+           
             return listing;
         }
+
 
         public void save()
         {

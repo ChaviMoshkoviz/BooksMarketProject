@@ -48,9 +48,9 @@ namespace Books.service
             }
             return user;
         }
-        public Users DeactivateUser(int id)
+        public Users ChangeUserStatus(int id)
         {
-            var user= _UserRepository.DeactivateUser(id);
+            var user= _UserRepository.ChangeUserStatus(id);
             if (user != null)
             {
                 _UserRepository.save();

@@ -12,8 +12,8 @@ using books;
 namespace Books.data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20260105140307_FinalFixForListing")]
-    partial class FinalFixForListing
+    [Migration("20260119112225_migration_name")]
+    partial class migration_name
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

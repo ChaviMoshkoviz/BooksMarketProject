@@ -18,8 +18,13 @@ namespace Books.core
             CreateMap<Listings,ListingsDTO>().ReverseMap();
             CreateMap<Users,UsersDTO>().ReverseMap();
             CreateMap<Users,PostUserDTO>().ReverseMap();
+            CreateMap<RegisterUserDTO, Users>().ReverseMap();
+            CreateMap<PutUsersDTO, Users>().ReverseMap();
+            CreateMap<Users, DeactivateUsersDTO>();
             CreateMap<Book, PostBooksDTO>().ReverseMap();
             CreateMap<Listings, PostListingsDTO>().ReverseMap();
+            CreateMap<PutListingsDTO, Listings>().ReverseMap();
+            CreateMap<Listings, DeactivateListingsDTO>().ReverseMap();
 
         }
     }
