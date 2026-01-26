@@ -1,6 +1,7 @@
 ﻿using books;
 using Books.core.Entities;
 using Books.core.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,25 +17,25 @@ namespace Books.data
         {
             _context = context;
         }
-        public List<Users> GetActivUsers()
+        public async Task< List<Users>> GetActivUsers()
         {
-            return _context.users.Where(u => u.status).ToList();
+            return await _context.users.Where(u => u.status).ToListAsync();
         }
-        public Users GetUserById(int id)
+        public async Task< Users >GetUserById(int id)
         {
-            return _context.users.FirstOrDefault(u => u.UserId == id && u.status);
+            return await _context.users.FirstOrDefaultAsync(u => u.UserId == id && u.status);
         }
-        public Users RegisterUser(Users newUser)
+        public async Task < Users >RegisterUser(Users newUser)
         {
        
             newUser.status = true;
-            _context.users.Add(newUser);
+           await _context.users.AddAsync(newUser);
             return newUser;
         }
 
-        public Users UpdateUser(int id, Users newUser)
+        public async Task< Users> UpdateUser(int id, Users newUser)
         {
-            var user = _context.users.FirstOrDefault(u => u.UserId == id);
+            var user =await _context.users.FirstOrDefaultAsync(u => u.UserId == id);
             if (user == null)
                 return null;
             user.FullName = newUser.FullName;
@@ -43,18 +44,18 @@ namespace Books.data
             user.City = newUser.City;
             return user;
         }
-        public Users ChangeUserStatus(int id)
+        public async Task< Users> ChangeUserStatus(int id)
         {
-            var user = _context.users.FirstOrDefault(u => u.UserId == id);
+            var user = await _context.users.FirstOrDefaultAsync(u => u.UserId == id);
             if (user == null)
                 return null;
             user.status = !user.status;
             return user;
         }
 
-        public void save()
+        public async Task save()
         {
-            _context.SaveChanges();
+           await _context.SaveChangesAsync();
         }
     }
 }

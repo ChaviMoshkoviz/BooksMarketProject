@@ -22,15 +22,15 @@ namespace books.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllListings()
+        public async Task< IActionResult> GetAllListings()
         {
-            var listing= _service.GetAllListings();
+            var listing= await _service.GetAllListings();
             return Ok(_mapper.Map<List<ListingsDTO>>(listing));
         }
         [HttpGet("byUser/{UserId}")]
-        public IActionResult GetListingsByUser(int UserId)
+        public async Task< IActionResult> GetListingsByUser(int UserId)
         {
-            var result = _service.GetListingsByUser(UserId);
+            var result = await _service.GetListingsByUser(UserId);
             if (result==null||!result.Any())
                 return NotFound("no ads found for this user");
             var resultDto = _mapper.Map<IEnumerable<ListingsDTO>>(result);
@@ -38,29 +38,29 @@ namespace books.Controllers
 
         }
         [HttpGet("byPrice")]
-        public IActionResult GetListingsByPriceRange(decimal minPrice, decimal maxPrice)
+        public async Task< IActionResult> GetListingsByPriceRange(decimal minPrice, decimal maxPrice)
         {
-            var results = _service.GetListingsByPriceRange(minPrice, maxPrice);
+            var results =await _service.GetListingsByPriceRange(minPrice, maxPrice);
             if (!results.Any())
                 return NotFound("no ads found in the requested price range");
             var resultDto = _mapper.Map<IEnumerable<ListingsDTO>>(results);
             return Ok(resultDto);
         }
         [HttpPost]
-        public IActionResult CreadeListing([FromBody] ListingsDTO newListingDto)
+        public async Task< IActionResult> CreadeListing([FromBody] ListingsDTO newListingDto)
         {
 
             var listingEntity = _mapper.Map<Listings>(newListingDto);
-            var result = _service.CreateListing(listingEntity);
+            var result =await _service.CreateListing(listingEntity);
 
             // החזרת האובייקט החדש שנוצר כ-DTO
             return Ok(_mapper.Map<ListingsDTO>(result));
         }
         [HttpPut("{id}")]
-        public IActionResult UpdateListing(int id, [FromBody] PutListingsDTO UpdateListing)
+        public async Task< IActionResult> UpdateListing(int id, [FromBody] PutListingsDTO UpdateListing)
         {
             var listingEntity = _mapper.Map<Listings>(UpdateListing);
-            var result = _service.UpdateListing(id, listingEntity);
+            var result = await _service.UpdateListing(id, listingEntity);
             if (result == null)
                 return NotFound("ads is not found");
             var finalDto = _mapper.Map<ListingsDTO>(result);
@@ -68,9 +68,9 @@ namespace books.Controllers
 
         }
         [HttpPut("{id}/disable")]
-        public IActionResult ToggleListingStatus(int id)
+        public async Task < IActionResult> ToggleListingStatus(int id)
         {
-            var result = _service.ToggleListingStatus(id);
+            var result = await _service.ToggleListingStatus(id);
             if (result == null)
                 return NotFound(new { Error = $"Listing with ID {id} not found" });
             var resultDto = _mapper.Map<DeactivateListingsDTO>(result);

@@ -1,6 +1,7 @@
 ﻿using books;
 using Books.core.Entities;
 using Books.core.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,53 +12,46 @@ namespace Books.data
 {
     public class BooksRepository: IBooksRepository
     {
-        //private readonly List<Book> _books = new List<Book>
-        //{
-        //     new Book {BookId = 1,Title="Duplicatim 1",Author="Yonah sapir",Genre="fantasy thriller",Condition="almost new"
-        //        ,Description="A fantasy thriller book bought a year ago , the first part of the series , worth reading "},
-        //                new Book {BookId = 2,Title="ki memeno",Author="Libi klain",Genre="Drama in the family",Condition="good condition"
-        //        ,Description="A suspenseful and emotional story about family, secrets and strengthening faith."},
-        //                            new Book {BookId = 3,Title="a gumi",Author="Menucha fux",Genre="children's book",Condition="new"
-        //        ,Description="explanation for children about rubber its origin, history and educational values."}
-        //};
+        
 
         private readonly DataContext _context;
         public BooksRepository(DataContext context)
         {
             _context = context;
         }
-        public List<Book> GetAllAsync()
+        public async Task< List<Book>> GetAllAsync()
         {
-            return _context.books.ToList();
+            return await _context.books.ToListAsync();
         }
-        public  List<Book> GetByGenreAsync(string genre)
+        public async Task< List<Book>> GetByGenreAsync(string genre)
         {
-            var result = _context.books.Where(b => b.Genre.ToLower() == genre.ToLower()).ToList();
-            return result;
+            return await _context.books
+                .Where(b => b.Genre.ToLower() == genre.ToLower()).ToListAsync();
+        
 
         }
-        public  List<Book> GetByAuthorAsync(string author)
+        public async Task< List<Book>> GetByAuthorAsync(string author)
         {
-            var result = _context.books // הוספת .Books
+            return await _context.books // הוספת .Books
                  .Where(b => b.Author.ToLower() == author.ToLower())
-                 .ToList();
-            return result;
+                . ToListAsync();
+         
 
         }
-        public Book AddAsync(Book book)
+        public async Task< Book >AddAsync(Book book)
         {
           
         
            
-            _context.books.Add(book);
+           await _context.books.AddAsync(book);
         
             return book;
 ;
         }
 
-        public void save()
+        public async Task save()
         {
-            _context.SaveChanges();
+           await _context.SaveChangesAsync();
         }
 
     }

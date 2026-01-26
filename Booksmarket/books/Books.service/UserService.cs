@@ -17,43 +17,43 @@ namespace Books.service
         {
             _UserRepository = UserRepository;
         }
-        public List<Users> GetActivUsers()
+        public async Task< List<Users>> GetActivUsers()
         {
-            return _UserRepository.GetActivUsers();
+            return await _UserRepository.GetActivUsers();
         }
-        public Users GetUserById(int id)
+        public async Task< Users> GetUserById(int id)
         {
-            return _UserRepository.GetUserById(id);
+            return await _UserRepository.GetUserById(id);
         }
-        public Users RegisterUser( Users newUser)
+        public async Task< Users> RegisterUser( Users newUser)
         {
             if (newUser == null)
             {
                 return null;
             }
-            var user = _UserRepository.RegisterUser(newUser);
+            var user = await _UserRepository.RegisterUser(newUser);
             if (user != null)
             {
-                _UserRepository.save();
+               await _UserRepository.save();
             }
             return user ;
         }
 
-        public Users UpdateUser(int id,  Users newUser)
+        public async Task< Users> UpdateUser(int id,  Users newUser)
         {
-            var user= _UserRepository.UpdateUser(id, newUser);
+            var user= await _UserRepository.UpdateUser(id, newUser);
             if (user != null)
             {
-                _UserRepository.save();
+              await  _UserRepository.save();
             }
             return user;
         }
-        public Users ChangeUserStatus(int id)
+        public async Task< Users> ChangeUserStatus(int id)
         {
-            var user= _UserRepository.ChangeUserStatus(id);
+            var user= await _UserRepository.ChangeUserStatus(id);
             if (user != null)
             {
-                _UserRepository.save();
+                await _UserRepository.save();
             }
             return user;
         }

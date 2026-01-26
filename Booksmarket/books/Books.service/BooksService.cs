@@ -18,27 +18,27 @@ namespace Books.service
         {
             _BooksRepository = BooksRepository;
         }
-        public List<Book> GetAllBooks()
+        public async Task< List<Book>> GetAllBooks()
         {
-            return _BooksRepository.GetAllAsync();
+            return await _BooksRepository.GetAllAsync();
         }
-        public List<Book> GetBooksByAuthor(string author)
+        public async Task < List<Book>> GetBooksByAuthor(string author)
         {
-            return _BooksRepository.GetByAuthorAsync(author);
+            return await _BooksRepository.GetByAuthorAsync(author);
         }
 
-        public List<Book> GetBooksByGenre(string genre)
+        public async Task < List<Book>> GetBooksByGenre(string genre)
         {
-            return _BooksRepository.GetByGenreAsync(genre);
+            return await _BooksRepository.GetByGenreAsync(genre);
         }
-        public Book AddBook(Book newBook)
+        public async Task < Book> AddBook(Book newBook)
         {
             if (newBook == null)
             {
                 return null;
             }
-            var book = _BooksRepository.AddAsync(newBook);
-            _BooksRepository.save();
+            var book = await _BooksRepository.AddAsync(newBook);
+           await _BooksRepository.save();
             return book;
         }
 

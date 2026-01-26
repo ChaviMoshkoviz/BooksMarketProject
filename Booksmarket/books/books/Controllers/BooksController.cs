@@ -21,9 +21,9 @@ namespace books.Controllers
             _mapper=mapper;
         }
         [HttpGet]
-        public IActionResult GetAllBooks()
+        public async Task < IActionResult> GetAllBooks()
         {
-          var books = _service.GetAllBooks();
+          var books =await _service.GetAllBooks();
             if(!books.Any())
                 return NotFound("no books found");
             var booksDto = _mapper.Map<IEnumerable<BooksDTO>>(books);
@@ -31,33 +31,36 @@ namespace books.Controllers
         
         }
         [HttpGet("author/{Author}")]
-        public IActionResult GetBooksByAuthor(string Author)
+        public async Task<IActionResult> GetBooksByAuthor(string Author)
         {
-            var filteredBooks=_service.GetBooksByAuthor(Author);
-            if (!filteredBooks.Any())
+            var filteredBooks = await _service.GetBooksByAuthor(Author);
+            if (!filteredBooks.Any() ||filteredBooks==null)
                 return NotFound($"No books found by author {Author}");
             var booksDto = _mapper.Map<IEnumerable<BooksDTO>>(filteredBooks);
             return Ok(booksDto);
         }
 
         [HttpGet("genre/{Genre}")]
-        public IActionResult GetBooksByGenre(string Genre)
+        public async Task < IActionResult> GetBooksByGenre(string Genre)
         {
-            var filteredBooks = _service.GetBooksByGenre(Genre);
-            if (!filteredBooks.Any())
+            var filteredBooks = await _service.GetBooksByGenre(Genre);
+            if (!filteredBooks.Any() || filteredBooks==null)
                 return NotFound($"No books found by category {Genre}");
             var booksDto = _mapper.Map<IEnumerable<BooksDTO>>(filteredBooks);
             return Ok(booksDto);
         }
         [HttpPost]
-        public IActionResult AddBook([FromBody] BooksDTO newBookDto)
+        public async Task< IActionResult> AddBook([FromBody] BooksDTO newBookDto)
         {
-
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             // 1. מיפוי מה-DTO שקיבלנו מהמשתמש לישות של בסיס הנתונים
             var bookEntity = _mapper.Map<Book>(newBookDto);
 
             // 2. שמירה בבסיס הנתונים דרך הסרביס
-            var addedBook = _service.AddBook(bookEntity);
+            var addedBook = await _service.AddBook(bookEntity);
 
             // 3. החזרת התוצאה כ-DTO (אופציונלי אך מומלץ)
             return Ok(_mapper.Map<BooksDTO>(addedBook));

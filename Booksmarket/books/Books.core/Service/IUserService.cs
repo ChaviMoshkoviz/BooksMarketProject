@@ -9,10 +9,10 @@ namespace Books.core.Service
 {
     public interface IUserService
     {
-        List<Users> GetActivUsers();
-        Users GetUserById(int id);
-        Users RegisterUser(Users newUser);
-        Users UpdateUser(int id, Users newUser);
-        Users ChangeUserStatus(int id);
+       Task< List<Users>> GetActivUsers();
+       Task< Users> GetUserById(int id);
+       Task< Users> RegisterUser(Users newUser);
+       Task< Users > UpdateUser(int id, Users newUser);
+       Task< Users> ChangeUserStatus(int id);
     }
 }

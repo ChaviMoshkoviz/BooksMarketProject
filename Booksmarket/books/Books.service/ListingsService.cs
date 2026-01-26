@@ -17,38 +17,39 @@ namespace Books.service
         {
             _ListingsRepository = ListingsRepository;
         }
-        public List<Listings> GetAllListings()
+        public async Task< List<Listings>> GetAllListings()
         {
-            return _ListingsRepository.GetAllListings();
+            return await _ListingsRepository.GetAllListings();
         }
-        public List<Listings> GetListingsByUser(int userId)
+        public async Task< List<Listings>> GetListingsByUser(int userId)
         {
-            return _ListingsRepository.GetListingsByUser(userId);
+            return await _ListingsRepository.GetListingsByUser(userId);
         }
-        public List<Listings> GetListingsByPriceRange(decimal minPrice, decimal maxPrice)
+        public async Task< List<Listings>> GetListingsByPriceRange(decimal minPrice, decimal maxPrice)
         {
-            return _ListingsRepository.GetListingsByPriceRange( minPrice,  maxPrice);
+            return await _ListingsRepository.GetListingsByPriceRange( minPrice,  maxPrice);
         }
-        public Listings CreateListing(Listings newListings)
-        {var listings = _ListingsRepository.CreateListing(newListings);
-            _ListingsRepository.save();
+        public async Task< Listings> CreateListing(Listings newListings)
+        {
+            var listings =await _ListingsRepository.CreateListing(newListings);
+          await  _ListingsRepository.save();
             return listings;
         }
-        public Listings UpdateListing(int id, Listings UpdateListing)
+        public async Task< Listings > UpdateListing(int id, Listings UpdateListing)
         {
-            var listings = _ListingsRepository.UpdateListing(id, UpdateListing);
+            var listings = await _ListingsRepository.UpdateListing(id, UpdateListing);
             if (listings != null)
             {
-                _ListingsRepository.save();
+               await _ListingsRepository.save();
             }
             return listings ;
         }
-        public Listings ToggleListingStatus(int id)
+        public async Task < Listings> ToggleListingStatus(int id)
         {
-            var listings = _ListingsRepository.ToggleListingStatus(id);
+            var listings = await _ListingsRepository.ToggleListingStatus(id);
             if (listings != null)
             {
-                _ListingsRepository.save();
+               await _ListingsRepository.save();
                
             }
             return listings;

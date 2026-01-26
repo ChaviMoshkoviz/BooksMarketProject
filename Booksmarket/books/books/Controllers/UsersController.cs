@@ -24,16 +24,16 @@ namespace books.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetActivUsers()
+        public async Task< IActionResult> GetActivUsers()
         {
-            var user = _service.GetActivUsers();
+            var user =await _service.GetActivUsers();
             return Ok(_mapper.Map<IEnumerable<UsersDTO>>(user));
         }
 
         [HttpGet("{UserId}")]
-        public IActionResult GetUserById(int UserId)
+        public async Task< IActionResult> GetUserById(int UserId)
         {
-            var user = _service.GetUserById(UserId);
+            var user =await _service.GetUserById(UserId);
             if (user == null)
                 return NotFound("user not found or inactiv");
             var userDto = _mapper.Map<UsersDTO>(user);
@@ -42,7 +42,7 @@ namespace books.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult RegisterUser([FromBody] RegisterUserDTO newUserDto)
+        public async Task< IActionResult> RegisterUser([FromBody] RegisterUserDTO newUserDto)
         {
             if (!ModelState.IsValid)
             {
@@ -51,7 +51,7 @@ namespace books.Controllers
             // אבטחה: מיפוי מה-DTO לישות כדי למנוע הזרקת שדות רגישים
             var userEntity = _mapper.Map<Users>(newUserDto);
 
-            var createdUser = _service.RegisterUser(userEntity);
+            var createdUser = await _service.RegisterUser(userEntity);
 
             // החזרת התוצאה כ-DTO (מומלץ להשתמש ב-CreatedAtAction)
             var resultDto = _mapper.Map<UsersDTO>(createdUser);
@@ -59,10 +59,10 @@ namespace books.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateUser(int id, [FromBody] PutUsersDTO newUser)
+        public async Task< IActionResult> UpdateUser(int id, [FromBody] PutUsersDTO newUser)
         {
             var userEntity = _mapper.Map<Users>(newUser);
-            var user = _service.UpdateUser(id, userEntity);
+            var user = await _service.UpdateUser(id, userEntity);
             if (user == null)
                 return NotFound("user not found");
             var userDto = _mapper.Map<UsersDTO>(user);
@@ -70,9 +70,9 @@ namespace books.Controllers
         }
      
         [HttpPut("deactivate/{id}")]
-        public IActionResult ChangeUserStatus(int id)
+        public async Task< IActionResult> ChangeUserStatus(int id)
         {
-            var user = _service.ChangeUserStatus(id);
+            var user = await _service.ChangeUserStatus(id);
 
             if (user == null)
                 return NotFound("user not found");

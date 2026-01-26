@@ -9,9 +9,9 @@ namespace Books.core.Service
 {
     public interface IBooksService
     {
-        List<Book> GetAllBooks();
-        List<Book> GetBooksByGenre(string Genre);
-        List<Book> GetBooksByAuthor(string Author);
-        Book AddBook(Book book);
+       Task < List<Book>> GetAllBooks();
+      Task <  List<Book>> GetBooksByGenre(string Genre);
+      Task <  List<Book>> GetBooksByAuthor(string Author);
+       Task < Book> AddBook(Book book);
     }
 }

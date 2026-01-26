@@ -9,11 +9,11 @@ namespace Books.core.Repositories
 {
     public interface IBooksRepository
     {
-        List<Book> GetAllAsync();
-        List<Book>GetByGenreAsync(string genre);
-        List<Book> GetByAuthorAsync(string author);
-       Book AddAsync(Book book);
-        void save();
+       Task< List<Book>> GetAllAsync();
+       Task< List<Book>>GetByGenreAsync(string genre);
+       Task< List<Book> >GetByAuthorAsync(string author);
+       Task < Book >AddAsync(Book book);
+        Task save();
 
 
     }
