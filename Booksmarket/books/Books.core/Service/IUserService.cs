@@ -12,7 +12,8 @@ namespace Books.core.Service
        Task< List<Users>> GetActivUsers();
        Task< Users> GetUserById(int id);
        Task< Users> RegisterUser(Users newUser);
-       Task< Users > UpdateUser(int id, Users newUser);
+        public Task<Users> GetByEmailAndPassword(string email, string password);
+        Task< Users > UpdateUser(int id, Users newUser);
        Task< Users> ChangeUserStatus(int id);
     }
 }

@@ -33,6 +33,11 @@ namespace Books.data
             return newUser;
         }
 
+        public async Task<Users> GetByEmailAndPasswordAsync(string email, string password)
+        {
+            return await _context.users.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+        }
+
         public async Task< Users> UpdateUser(int id, Users newUser)
         {
             var user =await _context.users.FirstOrDefaultAsync(u => u.UserId == id);

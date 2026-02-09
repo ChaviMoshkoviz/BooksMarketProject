@@ -38,7 +38,11 @@ namespace Books.service
             }
             return user ;
         }
-
+        public async Task<Users> GetByEmailAndPassword(string email, string password)
+        {
+            // קריאה לפונקציה המקבילה ב-Repository
+            return await _UserRepository.GetByEmailAndPasswordAsync(email, password);
+        }
         public async Task< Users> UpdateUser(int id,  Users newUser)
         {
             var user= await _UserRepository.UpdateUser(id, newUser);

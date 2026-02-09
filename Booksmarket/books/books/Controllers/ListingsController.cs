@@ -3,6 +3,7 @@ using Books.core.DTO;
 using Books.core.Entities;
 using Books.core.Service;
 using Books.service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -46,6 +47,7 @@ namespace books.Controllers
             var resultDto = _mapper.Map<IEnumerable<ListingsDTO>>(results);
             return Ok(resultDto);
         }
+        [Authorize]
         [HttpPost]
         public async Task< IActionResult> CreadeListing([FromBody] ListingsDTO newListingDto)
         {
@@ -56,6 +58,7 @@ namespace books.Controllers
             // החזרת האובייקט החדש שנוצר כ-DTO
             return Ok(_mapper.Map<ListingsDTO>(result));
         }
+        [Authorize]
         [HttpPut("{id}")]
         public async Task< IActionResult> UpdateListing(int id, [FromBody] PutListingsDTO UpdateListing)
         {
@@ -67,6 +70,7 @@ namespace books.Controllers
             return Ok(finalDto);
 
         }
+        [Authorize]
         [HttpPut("{id}/disable")]
         public async Task < IActionResult> ToggleListingStatus(int id)
         {
