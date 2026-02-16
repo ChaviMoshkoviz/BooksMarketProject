@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace books.Controllers
 {
@@ -49,15 +50,49 @@ namespace books.Controllers
         }
         [Authorize]
         [HttpPost]
-        public async Task< IActionResult> CreadeListing([FromBody] ListingsDTO newListingDto)
+        public async Task<IActionResult> CreadeListing([FromBody] PostListingsDTO newListingDto)
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null) return Unauthorized();
 
             var listingEntity = _mapper.Map<Listings>(newListingDto);
-            var result =await _service.CreateListing(listingEntity);
 
-            // החזרת האובייקט החדש שנוצר כ-DTO
+            // אבטחה: קביעת ה-UserId לפי המשתמש המחובר באמת
+            listingEntity.UserId = int.Parse(userIdClaim.Value);
+
+            var result = await _service.CreateListing(listingEntity);
             return Ok(_mapper.Map<ListingsDTO>(result));
         }
+
+        [Authorize] // רק משתמשים מחוברים יכולים להעלות תמונה
+        [HttpPost("{id}/upload-image")]
+        public async Task<IActionResult> UploadImage(int id, IFormFile file)
+        {
+            // 1. שליפת ה-ID של המשתמש המחובר מתוך ה-Token
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+                return Unauthorized("User not identified.");
+
+            int currentUserId = int.Parse(userIdClaim.Value);
+
+            try
+            {
+                // תיקון: הקריאה צריכה להיות ל-_service ולא ל-_listingRepository
+                // וודאי שבממשק IListingsService ובמחלקה ListingsService קיימת הפונקציה הזו
+                var imagePath = await _service.SaveImageAsync(id, currentUserId, file);
+                return Ok(new { url = imagePath });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [Authorize]
         [HttpPut("{id}")]
         public async Task< IActionResult> UpdateListing(int id, [FromBody] PutListingsDTO UpdateListing)
@@ -74,16 +109,26 @@ namespace books.Controllers
         [HttpPut("{id}/disable")]
         public async Task < IActionResult> ToggleListingStatus(int id)
         {
-            var result = await _service.ToggleListingStatus(id);
-            if (result == null)
+            var listings = await _service.GetAllListings();
+            var listing = listings.FirstOrDefault(l => l.ListingId == id);
+            if (listing == null)
                 return NotFound(new { Error = $"Listing with ID {id} not found" });
+            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var isAdmin = User.IsInRole("Admin");
+            // בדיקת בעלות
+            if (listing.UserId.ToString() != currentUserId && !isAdmin)
+            {
+                return Forbid("You can only disable your own listings.");
+            }
+            var result = await _service.ToggleListingStatus(id);
             var resultDto = _mapper.Map<DeactivateListingsDTO>(result);
 
             // החזרת אובייקט אנונימי הכולל גם הודעה וגם את הנתונים
             return Ok(new
             {
-                Message = "Listing successfully disabled",
-                ListingId = resultDto.ListingId
+                Message = result.IsActiv ? "Listing enabled" : "Listing disabled",
+                ListingId = resultDto.ListingId,
+                IsActive = result.IsActiv
             });
         }
 

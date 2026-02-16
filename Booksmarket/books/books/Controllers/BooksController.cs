@@ -4,6 +4,7 @@ using Books.core.DTO;
 using Books.core.Entities;
 using Books.core.Service;
 using Books.service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,6 +49,31 @@ namespace books.Controllers
                 return NotFound($"No books found by category {Genre}");
             var booksDto = _mapper.Map<IEnumerable<BooksDTO>>(filteredBooks);
             return Ok(booksDto);
+        }
+        // בונוס: רשימת ספרים הממתינים לאישור (רק למנהל)
+        [Authorize(Roles = "Admin")]
+        [HttpGet("pending")]
+        public async Task<IActionResult> GetPendingBooks()
+        {
+            // קריאה לפונקציה החדשה בסרביס
+            var pending = await _service.GetPendingBooks();
+
+            if (pending == null || !pending.Any())
+                return Ok(new { Message = "No books are currently waiting for approval." });
+
+            // מיפוי ל-DTO והחזרה למנהל
+            var booksDto = _mapper.Map<IEnumerable<BooksDTO>>(pending);
+            return Ok(booksDto);
+        }
+        [Authorize(Roles = "Admin")] // רק מנהל יכול לאשר ספרים
+        [HttpPut("{id}/approve")]
+        public async Task<IActionResult> ApproveBook(int id)
+        {
+            var approvedBook = await _service.ApproveBook(id);
+            if (approvedBook == null)
+                return NotFound("Book not found");
+
+            return Ok(new { Message = "Book approved successfully", Book = _mapper.Map<BooksDTO>(approvedBook) });
         }
         [HttpPost]
         public async Task< IActionResult> AddBook([FromBody] BooksDTO newBookDto)

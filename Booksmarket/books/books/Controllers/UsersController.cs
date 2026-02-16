@@ -74,11 +74,15 @@ namespace books.Controllers
 
             if (user != null)
             {
+                if (!user.status) // אם הסטטוס הוא false
+                {
+                    return Unauthorized("Your account has been disabled. Please contact your system administrator.");
+                }
                 var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, user.FullName),
             new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-            new Claim(ClaimTypes.Role, "Registered") // התפקיד שקבענו
+            new Claim(ClaimTypes.Role, user.Role.ToString()) // התפקיד שקבענו
         };
 
                 // שימי לב לשימוש ב-Configuration כפי שהמורה הראתה
@@ -97,7 +101,7 @@ namespace books.Controllers
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
                 return Ok(new { Token = tokenString });
             }
-            return Unauthorized("פרטי התחברות שגויים");
+            return Unauthorized("Incorrect login details");
         }
         [Authorize]
         [HttpPut("{id}")]
@@ -107,7 +111,7 @@ namespace books.Controllers
             var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (currentUserId != id.ToString())
             {
-                return Forbid("אינך מורשה לעדכן פרטים של משתמש אחר");
+                return Forbid("You are not authorized to update another user's details.");
             }
             var userEntity = _mapper.Map<Users>(newUser);
             var user = await _service.UpdateUser(id, userEntity);
@@ -121,17 +125,18 @@ namespace books.Controllers
         public async Task< IActionResult> ChangeUserStatus(int id)
         {
             var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (currentUserId != id.ToString())
+            var isAdmin = User.IsInRole("Admin");
+            if (currentUserId != id.ToString() || isAdmin)
             {
-                return Forbid();
+                var user = await _service.ChangeUserStatus(id);
+                if (user == null)
+                    return NotFound("User not found");
+
+                return Ok(_mapper.Map<DeactivateUsersDTO>(user));
             }
-            var user = await _service.ChangeUserStatus(id);
 
-            if (user == null)
-                return NotFound("user not found");
-            var userDto = _mapper.Map<DeactivateUsersDTO>(user);
-
-            return Ok(userDto);
+            // אם לא זה ולא זה - חסימה
+            return Forbid("You do not have permission to disable another user.");
         }
     
     }

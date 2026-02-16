@@ -18,6 +18,14 @@ namespace Books.core.Entities
         public string City { get; set; } /* עיר*/
         public bool status { get; set; } = true; /*סטטוס פעיל/לא פעיל*/
         public List<Listings> Listings { get; set; }/*כל המודעות שפורסמו */
+        public UserRole Role { get; set; } = UserRole.Registered;/* תפקיד מאותחל לרשום*/
+
+    }
+    public enum UserRole
+    {
+        Registered, // משתמש רשום - יכול להעלות מודעות
+        Admin,     // מנהל - יכול למחוק הכל ולאשר ספרים
+        
 
     }
 }

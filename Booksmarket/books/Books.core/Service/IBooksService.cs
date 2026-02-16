@@ -10,8 +10,11 @@ namespace Books.core.Service
     public interface IBooksService
     {
        Task < List<Book>> GetAllBooks();
+        Task<List<Book>> GetPendingBooks();
+       
       Task <  List<Book>> GetBooksByGenre(string Genre);
       Task <  List<Book>> GetBooksByAuthor(string Author);
        Task < Book> AddBook(Book book);
+        Task<Book> ApproveBook(int id);
     }
 }

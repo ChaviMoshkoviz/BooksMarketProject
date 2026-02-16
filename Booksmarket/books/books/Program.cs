@@ -60,7 +60,10 @@ builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
 })
+
+
 .AddJwtBearer(options =>
 {
     // חילוץ המפתח מהקונפיגורציה עם הגנה (Fallback)
@@ -83,6 +86,15 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(keyBytes)
     };
 });
+// פה הוספתי את מה שהיה חסר: הגדרת הרשאות (Authorization) - מה מותר לו
+builder.Services.AddAuthorization(options =>
+{
+    // פוליסה שדורשת תפקיד מנהל בלבד
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+
+    // פוליסה שמאפשרת גם למשתמש רשום וגם למנהל (לפעולות משותפות)
+    options.AddPolicy("RegisteredUser", policy => policy.RequireRole("Registered", "Admin"));
+});
 var app = builder.Build();
 
 
@@ -95,6 +107,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseMiddleware<books.Middleware.InputSanitizationMiddleware>();
 
 app.UseAuthentication();

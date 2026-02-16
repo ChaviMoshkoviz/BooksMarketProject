@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Books.service
 {
@@ -34,6 +35,11 @@ namespace Books.service
             var listings =await _ListingsRepository.CreateListing(newListings);
           await  _ListingsRepository.save();
             return listings;
+        }
+        public async Task<string> SaveImageAsync(int id, int currentUserId, IFormFile file)
+        {
+            // כאן ה-Service קורא ללוגיקה שכתבת ב-Repository
+            return await _ListingsRepository.SaveImageAsync(id, currentUserId, file);
         }
         public async Task< Listings > UpdateListing(int id, Listings UpdateListing)
         {

@@ -8,6 +8,7 @@ namespace Books.core.DTO
 {
     public class DeactivateUsersDTO
     {
+        public int UserId { get; set; }
         public bool status { get; set; } = true; /*סטטוס פעיל/לא פעיל*/
     }
 }

@@ -14,5 +14,6 @@ namespace Books.core.DTO
         public string ActionType { get; set; } /* סוג פעולה - מכירה או מסירה*/
         public decimal Price { get; set; } /* מחיר */
         public DateTime DatePosted { get; set; } = DateTime.Now; /*תאריך פרסום*/
+        
     }
 }

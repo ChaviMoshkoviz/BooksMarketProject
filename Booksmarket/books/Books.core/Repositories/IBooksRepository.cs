@@ -13,6 +13,7 @@ namespace Books.core.Repositories
        Task< List<Book>>GetByGenreAsync(string genre);
        Task< List<Book> >GetByAuthorAsync(string author);
        Task < Book >AddAsync(Book book);
+        Task<Book> GetByIdAsync(int id);
         Task save();
 
 

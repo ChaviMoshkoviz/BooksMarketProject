@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Books.core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,5 +15,6 @@ namespace Books.core.DTO
         public string Phone { get; set; } /* טלפון*/
         public string City { get; set; } /* עיר*/
         public bool status { get; set; } = true; /*סטטוס פעיל/לא פעיל*/
+        public UserRole Role { get; set; }
     }
 }

@@ -38,6 +38,10 @@ namespace Books.data
          
 
         }
+        public async Task<Book> GetByIdAsync(int id)
+        {
+            return await _context.books.FindAsync(id);
+        }
         public async Task< Book >AddAsync(Book book)
         {
           

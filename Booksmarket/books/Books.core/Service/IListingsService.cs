@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Books.core.Service
 {
@@ -13,7 +14,8 @@ namespace Books.core.Service
       Task<  List<Listings>> GetListingsByUser(int userId);
       Task<  List<Listings>> GetListingsByPriceRange(decimal minPrice, decimal maxPrice);
        Task< Listings> CreateListing(Listings newListings);
-      Task<  Listings> UpdateListing(int id, Listings UpdateListing);
+        Task<string> SaveImageAsync(int id, int currentUserId, IFormFile file);
+        Task<  Listings> UpdateListing(int id, Listings UpdateListing);
       Task<  Listings >ToggleListingStatus(int id);
     }
 }

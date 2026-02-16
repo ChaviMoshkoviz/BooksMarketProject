@@ -13,7 +13,7 @@ namespace Books.core.Repositories
        Task< Users> GetUserById(int id);
       Task< Users> RegisterUser(Users newUser);
        Task< Users> UpdateUser(int id, Users newUser);
-        public Task<Users> GetByEmailAndPasswordAsync(string email, string password);
+         Task<Users> GetByEmailAndPasswordAsync(string email, string password);
         Task< Users> ChangeUserStatus(int id);
         Task save();
     }

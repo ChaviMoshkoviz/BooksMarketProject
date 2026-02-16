@@ -17,5 +17,7 @@ namespace  Books.core.Entities
         public decimal Price { get; set; } /* מחיר */
         public DateTime DatePosted { get; set; }= DateTime.Now; /*תאריך פרסום*/
         public bool IsActiv {  get; set; } /*אם המודעה פעילה*/
+        public string? ImageUrl { get; set; }
+        public string BookTitle { get; set; }
     }
 }

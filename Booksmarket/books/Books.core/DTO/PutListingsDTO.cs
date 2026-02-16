@@ -13,6 +13,7 @@ namespace Books.core.DTO
         public int BookId { get; set; } /* מזהה ספר שפורסם*/
         public string ActionType { get; set; } /* סוג פעולה - מכירה או מסירה*/
         public decimal Price { get; set; } /* מחיר */
+        public string? ImageUrl { get; set; }
 
     }
 }

@@ -18,9 +18,28 @@ namespace Books.service
         {
             _BooksRepository = BooksRepository;
         }
-        public async Task< List<Book>> GetAllBooks()
+  
+        public async Task<List<Book>> GetAllBooks()
         {
-            return await _BooksRepository.GetAllAsync();
+            var books = await _BooksRepository.GetAllAsync();
+            return books.Where(b => b.IsApproved).ToList();
+        }
+        public async Task<List<Book>> GetPendingBooks()
+        {
+            var allBooks = await _BooksRepository.GetAllAsync();
+            // מחזירים רק ספרים שטרם אושרו
+            return allBooks.Where(b => !b.IsApproved).ToList();
+        }
+        // 2. פונקציית אישור למנהל
+        public async Task<Book> ApproveBook(int id)
+        {
+            var book = await _BooksRepository.GetByIdAsync(id);
+            if (book != null)
+            {
+                book.IsApproved = true;
+                await _BooksRepository.save();
+            }
+            return book;
         }
         public async Task < List<Book>> GetBooksByAuthor(string author)
         {
@@ -31,6 +50,7 @@ namespace Books.service
         {
             return await _BooksRepository.GetByGenreAsync(genre);
         }
+  
         public async Task < Book> AddBook(Book newBook)
         {
             if (newBook == null)

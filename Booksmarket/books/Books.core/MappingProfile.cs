@@ -15,7 +15,9 @@ namespace Books.core
         public MappingProfile()
         {
             CreateMap<Book, BooksDTO>().ReverseMap();
-            CreateMap<Listings,ListingsDTO>().ReverseMap();
+            // בתוך הקונסטרקטור של ה-MappingProfile
+            CreateMap<Listings, ListingsDTO>()
+                .ForMember(dest => dest.BookTitle, opt => opt.MapFrom(src => src.Book.Title));
             CreateMap<Users,UsersDTO>().ReverseMap();
             CreateMap<Users,PostUserDTO>().ReverseMap();
             CreateMap<RegisterUserDTO, Users>().ReverseMap();
@@ -25,6 +27,7 @@ namespace Books.core
             CreateMap<Listings, PostListingsDTO>().ReverseMap();
             CreateMap<PutListingsDTO, Listings>().ReverseMap();
             CreateMap<Listings, DeactivateListingsDTO>().ReverseMap();
+           
 
         }
     }
