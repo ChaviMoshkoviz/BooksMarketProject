@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BCrypt.Net;
 
 namespace Books.data
 {
@@ -27,7 +28,7 @@ namespace Books.data
         }
         public async Task < Users >RegisterUser(Users newUser)
         {
-       
+            newUser.Password = BCrypt.Net.BCrypt.HashPassword(newUser.Password);
             newUser.status = true;
            await _context.users.AddAsync(newUser);
             return newUser;
@@ -35,7 +36,17 @@ namespace Books.data
 
         public async Task<Users> GetByEmailAndPasswordAsync(string email, string password)
         {
-            return await _context.users.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+            // 1. קודם כל מוצאים את המשתמש לפי האימייל בלבד
+            var user = await _context.users.FirstOrDefaultAsync(u => u.Email == email && u.status);
+
+            // 2. אם המשתמש קיים, בודקים אם הסיסמה שהוזנה תואמת ל-Hash השמור
+            if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password))
+            {
+                return user;
+            }
+
+            // אם המשתמש לא נמצא או שהסיסמה שגויה
+            return null;
         }
 
         public async Task< Users> UpdateUser(int id, Users newUser)

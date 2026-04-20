@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace Books.core.Entities
 {
@@ -13,6 +14,8 @@ namespace Books.core.Entities
         public string FullName { get; set; } /* שם מלא*/
         [Required(ErrorMessage = "מייל הוא שדה חובה")]
         public string Email { get; set; } /* מייל*/
+        [Required]
+        [MaxLength(255)] // נותן מספיק מרווח ל-Hash (שצריך לפחות 60)
         public string Password { get; set; }
         public string Phone { get; set; } /* טלפון*/
         public string City { get; set; } /* עיר*/
