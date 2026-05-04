@@ -67,10 +67,10 @@ namespace books.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(string email, string password)
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginDto)
         {
             // שימוש בפונקציה החדשה שיצרנו בשכבת ה-Service
-            var user = await _service.GetByEmailAndPassword(email, password);
+            var user = await _service.GetByEmailAndPassword(loginDto.Email, loginDto.Password);
 
             if (user != null)
             {
